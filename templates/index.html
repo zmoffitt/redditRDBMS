@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>S4111 - Reddit RDBMS - Redditors</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">S4111 - Reddit RDBMS</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+	      <li><a href="/about">About</a></li>
+	      <li class="active"><a href="/redditors">Redditors</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Queries <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+		  <li><a href="/stats">Database Stats</a></li>
+		  <li><a href="/search/">Search</a></li>
+	   	  <li><a href="/subreddits">Subreddits</a></li>
+                  <li><a href="/threads">Threads</a></li>
+                  <li><a href="/another">Other</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+    <div class="container-fluid">
+    <h2>Redditors: <small class="text-muted">select id,author,url from redditors</small></h2>
+	<h4> Total records = {{(data | count/3) | int }}</h4>
+  	<table class="table">
+  <thead>
+    <tr>
+      <th>Unique_ID</th>
+      <th>Username</th>
+      <th>Author URL Link</th>
+      <th>See Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+	<tr>
+	{% set n = 0 %}{% set m = 1 %}{% set x = 1 %}
+	{% for i in data %} {% if x % 3 != 0 or n == 0 %}<td>{{ data[n] }}</td>
+	{% else %}<td><a href="{{ data[n] }}" target="_blank">Go to {{ data[n-1] }}'s Redditor Page</a></td><td><a href="/search/?id={{ data[n-1] }}">View Comments</a></td></tr>
+	{% endif %}{% set n = n + 1 %}{% set x = x + 1 %}{% endfor %}
+    </div>
+    </div>
+</div>
+</body>
+
+
+</html>

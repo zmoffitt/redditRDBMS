@@ -1,0 +1,117 @@
+<html>
+<head>
+  <title>S4111 - Reddit RDBMS - Redditors</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link link="prefetch" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap4.min.css" type="text/css">
+  <script rel="preload" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script rel="preload" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script rel="preload" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  <script rel="preload" src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap4.min.js"></script>
+  <style>body { padding-top: 70px; }</style>
+  <script>$(document).ready(function() {$('#redditors').DataTable( {"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], "columnDefs": [{ "orderable": false, "targets": 3 }]} );} );</script>
+  <style>
+        body {
+            overflow: hidden;
+        }
+
+        /* Preloader */
+
+        #preloader {
+            position:fixed;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color:#fff; /* change if the mask should have another color then white */
+            z-index:99; /* makes sure it stays on top */
+        }
+
+        #status {
+            width:200px;
+            height:200px;
+            position:absolute;
+            left:50%; /* centers the loading animation horizontally one the screen */
+            top:50%; /* centers the loading animation vertically one the screen */
+            background-repeat:no-repeat;
+            background-position:center;
+            margin:-100px 0 0 -100px; /* is width and height divided by two */
+        }
+  </style>
+</head>
+
+<body>
+<!-- Preloader -->
+<div id="preloader"><div id="status"><h3 class="text-center"><i class='fa fa-circle-o-notch fa-spin'></i> Loading...</h3></div></div>
+<!-- Content -->
+  <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">S4111 - Reddit RDBMS</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/search/">Search</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown active primary">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tables<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/comments">Comments</a></li>
+                  <li><a href="/media">Media</a></li>
+                  <li class="active"><a href="/redditors">Redditors</a></li>
+                  <li><a href="/subreddits">Subreddits</a></li>
+                  <li><a href="/threads">Threads</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+
+    <div class="container-fluid">
+    <h3>All Redditors</h3>
+	<h4><small>Total records = {{(data | count/3) | int }}</small></h4>
+  	<table class="table table-striped table-bordered table-hover table-condensed" id="redditors">
+  <thead>
+    <tr>
+      <th>Author Name</th>
+      <th class="small text-center"># Comments</th>
+      <th class="text-right">Author URL Link</th>
+      <th class="text-right">See All</th>
+    </tr>
+  </thead>
+  <tbody>
+	<tr>
+	{% set n = 0 %}{% set x = 1 %}{% for i in data %} {% if x % 3 != 0 and x % 3 != 2 or n == 0 %}<td>{{ data[n] }}</td>{% elif x % 3 == 2 %}<td class="text-center">{{ data[n] }}</td>
+	{% else %}<td class="text-right"><a href="{{ data[n] }}" target="_blank">Check out <strong>{{ data[n-2] }}</strong> on reddit.com</a></td><td class="text-right">{% if (data[n-1] | int) > 0 %}<small><a href="/search/?id={{ data[n-2] }}">View all {{ data[n-1] }} Comments</a></small>{% else %} No comments found :( {% endif %}</td></tr>
+	{% endif %}{% set n = n + 1 %}{% set x = x + 1 %}{% endfor %}
+    </div>
+    </div>
+</div>
+<!-- Preloader -->
+<script type="text/javascript">
+    //<![CDATA[
+        $(window).load(function() { // makes sure the whole site is loaded
+            $('#status').fadeOut(); // will first fade out the loading animation
+            $('#preloader').delay(50).fadeOut('fast'); // will fade out the white DIV that covers the website.
+            $('body').delay(50).css({'overflow':'visible'});
+        })
+    //]]>
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<html>
+<head>
+<title>S4111 - Reddit RDBMS - New Search</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/css/bootstrapValidator.css" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js" type="text/javascript"></script>
+<style>
+body { padding-top: 70px; }
+#tabOverride .nav-pills > li > a {
+	border-radius: 4px 4px 0 0;
+}
+</style>
+</head>
+
+<body>
+<div class="container"> 
+  <!-- Static navbar -->
+  
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"
+          data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar"><span class=
+          "sr-only">Toggle navigation</span></button>
+        <a class=
+          "navbar-brand" href="/">S4111 - Reddit RDBMS</a> </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li class="active"><a href="/search/">Search</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tables<span class="caret"></span></a>
+             <ul class="dropdown-menu">
+              <li><a href="/comments">Comments</a></li>
+              <li><a href="/media">Media</a></li>
+              <li><a href="/redditors">Redditors</a></li>
+              <li><a href="/subreddits">Subreddits</a></li>
+              <li><a href="/threads">Threads</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse --> 
+    </div>
+    <!--/.container-fluid --> 
+  </nav>
+  <div class="container-fluid">
+    <div id="tabOverride" class="col-md-10 col-md-offset-1">
+      <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="tab" href="#main">Search Authors</a></li>
+        <li><a data-toggle="tab" href="#threads">Search Threads</a></li>
+        <li><a data-toggle="tab" href="#comments">Search Comments</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="main" class="tab-pane active">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Find Redditors by username and show all comments</h4>
+              <p class="text-muted">Searches for a specific Redditor by username or Redditors that contain the search text and displays all comments.</p>
+            </div>
+            <div class="panel-body">
+              <form action="/search/" method="get" data-toggle="validator" role="form">
+                <div class="form-group row">
+                  <label for="redditorInput" class="col-sm-2 form-control-label text-right">Who or what<br />am I looking for?</label>
+                  <div class="col-sm-6">
+                    <input type="text" pattern="^[\_\-A-z0-9]{1,}$" class="form-control" name="id" id="id" placeholder="Redditor Username (e.g. Insane_Cat_Lady)" title="Only letters, numbers, ' or _ are allowed and at least one (1) is required to search" required>
+			 <div class="help-block with-errors"></div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 text-right">How should I do the matching?</label>
+                  <div class="col-sm-10">
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="q" id="q" value="exact" checked>
+                        Exact match search <i><strong>(case sensitive)</strong></i></label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="q" id="q" value="like">
+                        Search for Redditors with this in their name</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Searching...">Search Redditors</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+	  </div>
+	  <div class="alert alert-info"><strong>Need help?</strong><ul><li>When searching: only <u><strong>alphanumeric</strong></u> characters are valid and permitted.</li><li>Spaces are only permitted when searching <strong>threads</strong> or <strong>comments</strong>.</li><li>If invalid input is typed then your browser will notify you.</li><li>Many functions rely on <strong>Javascript</strong> and unexpected behavior may occur if disabled.</li><li>You can search within your search results using the contexual search box on the results page.</li></ul></div>
+        </div>
+        <div id="threads" class="tab-pane">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Find threads that contain the search text</h4>
+              <p class="text-muted">Searches for threads that contain the search variable or variables.</p>
+            </div>
+            <div class="panel-body">
+              <form action="/search/" method="get">
+	      <input type="hidden" name="t" value="thread">
+              <input type="hidden" name="s" value="f">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label text-right">Find threads<br />that contain this:</label>
+                  <div class="col-sm-6">
+                    <input type="text" pattern="^[\s\_\-\#\+\&\$\;\/\\A-z0-9]{1,}$" class="form-control" name="id" id="id" placeholder="Text to search for (e.g. 'beautiful cats' or 'male cat lady')" title="Only letters, numbers, or the characters (_,-,#,+,&,$,;) are allowed and at least one (1) is required to search" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Searching...">Search Threads</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="alert alert-info"><strong>Need help?</strong><ul><li>When searching: only <u><strong>alphanumeric</strong></u> characters are valid and permitted.</li><li>Spaces are only permitted when searching <strong>threads</strong> or <strong>comments</strong>.</li><li>If invalid input is typed then your browser will notify you.</li><li>Many functions rely on <strong>Javascript</strong> and unexpected behavior may occur if disabled.</li><li>You can search within your search results using the contexual search box on the results page.</li></ul></div>
+        </div>
+        <div id="comments" class="tab-pane">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Find comments that contain the search text</h4>
+              <p class="text-muted">Searches for threads that contain the search variable or variables.</p>
+            </div>
+            <div class="panel-body">
+              <form action="/search/" method="get">
+              <input type="hidden" name="t" value="comment">
+              <input type="hidden" name="s" value="f">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label text-right">Find comments that contain this:</label>
+                  <div class="col-sm-6">
+                    <input type="text" pattern="^[\s\_\-\#\+\&\$\;\/\\\@A-z0-9]{1,}$" class="form-control" name="id" id="id" placeholder="Text to search for (e.g. 'pony tail' or 'little black shelter cat')" title="Only letters, numbers, or the characters ( _, -, #, +, &, $, ;, \, /, @) are allowed and at least one (1) is required to search"  required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Searching...">Search Comments</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="alert alert-info"><strong>Need help?</strong><ul><li>When searching: only <u><strong>alphanumeric</strong></u> characters are valid and permitted.</li><li>Spaces are only permitted when searching <strong>threads</strong> or <strong>comments</strong>.</li><li>If invalid input is typed then your browser will notify you.</li><li>Many functions rely on <strong>Javascript</strong> and unexpected behavior may occur if disabled.</li><li>You can search within your search results using the contexual search box on the results page.</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+<script>
+$('.btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 1000);
+});
+</script>
+</body>
+</html>

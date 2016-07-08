@@ -1,0 +1,85 @@
+<html>
+<head>
+  <title>S4111 - Reddit RDBMS - Media</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap4.min.css" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap4.min.js"></script>
+  <script>$(document).ready(function() {$('#media').DataTable( {"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );} );</script> 
+  <style>body { padding-top: 70px; }</style>
+  <style>.autoScale { max-width: 600px; height: auto; width: auto;}</style>
+</head>
+
+<body>
+  <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">S4111 - Reddit RDBMS</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/search/">Search</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown active primary">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tables<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/comments">Comments</a></li>
+                  <li class="active"><a href="/media">Media</a></li>
+                  <li><a href="/redditors">Redditors</a></li>
+                  <li><a href="/subreddits">Subreddits</a></li>
+                  <li><a href="/threads">Threads</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+    <div class="container-fluid">
+        <h3>All Media</h3>
+	<h4><small>Total records = {{(data | count/3) | int }}</small></h4>
+        {% if ((data | count) | int) == 0 %}<p class="text-danger">No results were returned.</p>
+        {% else %}
+        <table class="table table-striped table-bordered table-hover table-condensed" id="media">
+	  <thead>
+	    <tr>
+		<th>Description</th>
+		<th>Image</th>
+		<th>URL</th>
+	    </tr>
+	 </thead>
+	 <tbody>
+	<tr>
+	{% set n = 0 %}{% set x = 1 %}{% for i in data %}{% if x % 3 != 0 and x % 3 != 2 or n == 0 %}
+	<td style="word-wrap: break-word;min-width: 25px;max-width: 120px;" class="small">{{ data[n] }}</a></td>
+	{% elif (x % 3) == 2 %}<td style="max-width:500px"><img class="autoScale" style="display:block;" src="{{ data[n+1] }}"><p class="small">Author: <em>{{ data [n] }}</em></p></td>
+	{% else %}<td class="text-center"><a href="{{ data[n] }}" target="_blank"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></td></tr>
+	{% endif %}{% set n = n + 1 %}{% set x = x + 1 %}{% endfor %}
+	{% endif %}
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+</body>
+</html>
