@@ -9,7 +9,7 @@ The web application front-end is written in Python using the following modules b
 
 The theme is based off of [Bootstrap CSS](http://getbootstrap.com/). Table formatting and in-result contextual searching is done via [DataTables for jQuery](https://datatables.net/).
 
-It can be accessed [here](http://s4111.cu.moffitt.de).
+It can be accessed [here](http://s4111.cu.moffitt.io:8111/).
 
 ## Getting Started
 
